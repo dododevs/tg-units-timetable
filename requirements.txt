@@ -1,0 +1,6 @@
+python-telegram-bot
+python-dotenv
+requests
+requests-cache
+dukpy
+psycopg2
