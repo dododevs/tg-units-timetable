@@ -1,2 +1,4 @@
+from telegram.utils.helpers import escape_markdown
+
 def escape_markdown_message(msg):
-    return msg.replace(".", "\\.").replace("-", "\\-").replace("(", "\\(").replace(")", "\\)")
+    return escape_markdown(msg, version=2)
