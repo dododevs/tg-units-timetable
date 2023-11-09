@@ -1,4 +1,4 @@
-from telegram import Update, ReplyKeyboardMarkup
+from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes
 
 from dotenv import load_dotenv
@@ -27,7 +27,10 @@ async def select_course(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     courses, faculties = api.get_all_courses_and_faculties()
     session: Session = get_session(update.effective_user.id)
     if not session.faculty:
-        return await update.message.reply_text("Select your /faculty first")
+        return await update.message.reply_text(
+            "Select your /faculty first",
+            reply_markup=ReplyKeyboardRemove()
+        )
     session.request_set_course()
     await update.message.reply_text(
         "Choose your course from the list",
@@ -41,7 +44,10 @@ async def select_course(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
 async def select_year(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     session: Session = get_session(update.effective_user.id)
     if not session.course:
-        return await update.message.reply_text("Select your /course first")
+        return await update.message.reply_text(
+            "Select your /course first",
+            reply_markup=ReplyKeyboardRemove()
+        )
     session.request_set_year()
     await update.message.reply_text(
         "Choose your year from the list",
@@ -55,13 +61,16 @@ async def select_year(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     session: Session = get_session(update.effective_user.id)
     session.reset_selections(reset_faculty=False, reset_course=False, reset_year=False)
-    await update.message.reply_text("Cancelled, all good")
+    await update.message.reply_text("Cancelled, all good", reply_markup=ReplyKeyboardRemove())
 
 def timetable(mode):
     async def tt(update: Update, context: ContextTypes.DEFAULT_TYPE):
         session: Session = get_session(update.effective_user.id)
         if not session.has_all_timetable_parameters():
-            await update.message.reply_text("Select your /faculty, /course and /year first")
+            await update.message.reply_text(
+                "Select your /faculty, /course and /year first",
+                reply_markup=ReplyKeyboardRemove()
+            )
         else:
             if mode == "tomorrow":
                 tt = api.get_timetable(
@@ -132,7 +141,7 @@ async def message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     session: Session = get_session(update.effective_user.id)
     ret, msg = session.process(update, courses=courses, faculties=faculties)
     if ret:
-        await update.message.reply_text(msg)
+        await update.message.reply_text(msg, reply_markup=ReplyKeyboardRemove())
 
 app = Application.builder().token(os.environ["TELEGRAM_BOT_API_KEY"]).build()
 app.add_handler(CommandHandler("cancel", cancel))
