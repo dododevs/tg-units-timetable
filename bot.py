@@ -122,7 +122,9 @@ def timetable(mode):
                     "time": (t["ora_inizio"], t["ora_fine"]),
                     "room": t["aula"].replace("-", "\\-").replace(".", "\\."),
                     "course": t["nome_insegnamento"].replace("-", "\\-").replace(".", "\\."),
-                    "lecturer": t["docente"].replace("-", "\\").replace(".", "\\.")
+                    "lecturer": t["docente"].replace("-", "\\").replace(".", "\\."),
+                    "cancelled": t["Annullato"] != "0",
+                    "over": False
                 } for t in tt["celle"] if t["data"] == date.today().strftime("%d-%m-%Y") and datetime.combine(date.today(), datetime.strptime(t["ora_inizio"], "%H:%M").time()) <= now <= datetime.combine(date.today(), datetime.strptime(t["ora_fine"], "%H:%M").time())]
                 if len(lectures) == 0:
                     return await update.message.reply_text("No lecture found for right now")
