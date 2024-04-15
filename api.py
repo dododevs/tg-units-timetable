@@ -21,9 +21,10 @@ def request(method, endpoint, params):
         return None
 
 def get_all_courses_and_faculties():
+    today = datetime.date.today()
     return dukpy.evaljs(request("GET", "combo.php", {
         "page": "corsi",
-        "aa": datetime.date.today().year
+        "aa": today.year if 9 <= today.month <= 12 else today.year - 1 
     }).text + "; [elenco_corsi, elenco_scuole]")
 
 def get_timetable(date, faculty, degree, course):
