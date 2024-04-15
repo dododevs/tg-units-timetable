@@ -1,3 +1,4 @@
+import os
 import psycopg2
 from telegram import Update
 from ast import literal_eval
