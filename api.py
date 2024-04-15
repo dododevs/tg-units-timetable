@@ -28,11 +28,12 @@ def get_all_courses_and_faculties():
     }).text + "; [elenco_corsi, elenco_scuole]")
 
 def get_timetable(date, faculty, degree, course):
+    today = datetime.date.today()
     return request("POST", "grid_call.php", {
         "view": "easycourse",
         "form-type": "corso",
         "include": "corso",
-        "anno": str(datetime.date.today().year),
+        "anno": str(today.year if 9 <= today.month <= 12 else today.year - 1),
         "scuola": faculty,
         "corso": degree,
         "date": date,
