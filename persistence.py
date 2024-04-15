@@ -2,11 +2,14 @@ import psycopg2
 from telegram import Update
 from ast import literal_eval
 
-PG_DATABASE = "units_timetable_bot"
-PG_HOST = "localhost"
-PG_PORT = 5432
-PG_USER = "postgres"
-PG_PASSWORD = "postgres"
+from dotenv import load_dotenv
+load_dotenv()
+
+PG_DATABASE = os.environ["PG_DATABASE"]
+PG_HOST = os.environ["PG_HOST"]
+PG_PORT = os.environ["PG_PORT"]
+PG_USER = os.environ["PG_USER"]
+PG_PASSWORD = os.environ["PG_PASSWORD"]
 
 print("[persistence] Connecting to database...")
 db = psycopg2.connect(
