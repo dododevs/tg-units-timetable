@@ -2,9 +2,6 @@ import psycopg2
 from telegram import Update
 from ast import literal_eval
 
-from dotenv import load_dotenv
-load_dotenv()
-
 PG_DATABASE = os.environ["PG_DATABASE"]
 PG_HOST = os.environ["PG_HOST"]
 PG_PORT = os.environ["PG_PORT"]
